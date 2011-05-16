@@ -31,9 +31,12 @@ Configure you model with the annotations:
 
 Configure an ObjectContext instance with your(s) class(es):
 
-*There is no factory since OSEM tend to be integrated directly in ES*
+    import org.elasticsearch.osem.core.ObjectContext;
+    import org.elasticsearch.osem.core.ObjectContextFactory;
 
-    ObjectContext context = new ObjectContextImpl();
+    ...
+
+    ObjectContext context = ObjectContextFactory.create();
     context.add(Tweet.class);
 
 Then you can write objects to the ElasticSearch client:
