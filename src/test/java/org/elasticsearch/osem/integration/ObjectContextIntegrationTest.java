@@ -18,12 +18,6 @@
  */
 package org.elasticsearch.osem.integration;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeMethod;
-import org.testng.Assert;
-import org.testng.AssertJUnit;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,10 +25,8 @@ import java.util.Date;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.common.jackson.JsonFactory;
 import org.elasticsearch.common.jackson.JsonParseException;
 import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.xcontent.json.JsonXContentParser;
 import org.elasticsearch.index.query.xcontent.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
@@ -47,6 +39,11 @@ import org.elasticsearch.osem.pojo.users.EmailContact;
 import org.elasticsearch.osem.pojo.users.PhoneContact;
 import org.elasticsearch.osem.pojo.users.User;
 import org.elasticsearch.search.SearchHit;
+import org.testng.Assert;
+import org.testng.AssertJUnit;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * 
@@ -60,7 +57,7 @@ public class ObjectContextIntegrationTest {
     private ObjectContext context;
 
     @BeforeMethod()
-	public void doStart() {
+    public void doStart() {
         context = new ObjectContextImpl();
         // Starting node
         ImmutableSettings.Builder settings = NodeBuilder.nodeBuilder().settings();
@@ -73,7 +70,7 @@ public class ObjectContextIntegrationTest {
     }
 
     @AfterMethod()
-	public void doStop() {
+    public void doStop() {
         node.stop();
     }
 
@@ -98,7 +95,7 @@ public class ObjectContextIntegrationTest {
         SearchResponse searchResponse = node.client().prepareSearch("twitter").setSearchType(SearchType.DFS_QUERY_AND_FETCH).setQuery(
                 QueryBuilders.termQuery("user", "aloiscochard")).setExplain(true).execute().actionGet();
         for (SearchHit hit : searchResponse.getHits()) {
-            Tweet t = context.read(Tweet.class, hit);
+            Tweet t = context.read(hit);
             AssertJUnit.assertNotNull(t);
             AssertJUnit.assertEquals(tweet.getUser(), t.getUser());
             AssertJUnit.assertEquals(tweet.getMessage(), t.getMessage());
@@ -107,7 +104,7 @@ public class ObjectContextIntegrationTest {
         }
         Assert.fail();
     }
-    
+
     @Test
     public void pojoWithIdTest() throws ObjectContextDeserializationException, JsonParseException, IOException {
         Collection<Contact> contacts = new ArrayList<Contact>();
@@ -123,7 +120,7 @@ public class ObjectContextIntegrationTest {
         User user = new User();
         user.setContacts(contacts);
         user.setName("aloiscochard");
-        
+
         context.add(User.class);
 
         // Create
@@ -138,7 +135,7 @@ public class ObjectContextIntegrationTest {
         SearchResponse searchResponse = node.client().prepareSearch("users").setSearchType(SearchType.DFS_QUERY_AND_FETCH).setQuery(
                 QueryBuilders.termQuery("name", "aloiscochard")).setExplain(true).execute().actionGet();
         for (SearchHit hit : searchResponse.getHits()) {
-            User u = context.read(User.class, hit);
+            User u = context.read(hit);
             AssertJUnit.assertNotNull(u);
             Assert.assertNotNull(u.getId());
             Assert.assertFalse(u.getId().isEmpty());

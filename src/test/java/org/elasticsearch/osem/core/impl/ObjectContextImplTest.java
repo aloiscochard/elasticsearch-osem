@@ -18,18 +18,11 @@
  */
 package org.elasticsearch.osem.core.impl;
 
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeMethod;
-import org.testng.AssertJUnit;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.common.jackson.JsonFactory;
-import org.elasticsearch.common.xcontent.json.JsonXContentParser;
 import org.elasticsearch.osem.core.ObjectContext;
 import org.elasticsearch.osem.core.ObjectContextSerializationException;
 import org.elasticsearch.osem.pojo.twitter.Tweet;
@@ -38,6 +31,9 @@ import org.elasticsearch.osem.pojo.users.EmailContact;
 import org.elasticsearch.osem.pojo.users.PhoneContact;
 import org.elasticsearch.osem.pojo.users.User;
 import org.elasticsearch.search.internal.InternalSearchHit;
+import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * 
@@ -49,7 +45,7 @@ public class ObjectContextImplTest {
     private ObjectContext context;
 
     @BeforeMethod()
-	public void setUp() {
+    public void setUp() {
         context = new ObjectContextImpl();
     }
 
@@ -61,12 +57,13 @@ public class ObjectContextImplTest {
         tweet.setDate(new Date());
 
         context.add(Tweet.class);
-        
-        String mapping = "{\"tweet\":{\"properties\":{\"message\":{\"type\":\"string\"},\"post_date\":{\"type\":\"date\",\"format\":\"dateOptionalTime\"},\"user\":{\"type\":\"string\"}}}}";
+
+        String mapping = "{\"tweet\":{\"properties\":{\"message\":{\"type\":\"string\"},\"post_date\":{\"type\":\"date\",\"format\":\"dateOptionalTime\"},\"user\":{\"type\":\"string\"}}}}";
+
         AssertJUnit.assertEquals(mapping, new String(context.getMapping(Tweet.class).copiedBytes()));
 
         String json = new String(context.write(tweet).copiedBytes());
-        Tweet t = context.read(Tweet.class, new InternalSearchHit(1, "1", "tweet", json.getBytes(), null));
+        Tweet t = context.read(new InternalSearchHit(1, "1", "tweet", json.getBytes(), null));
         AssertJUnit.assertEquals(tweet.getUser(), t.getUser());
         AssertJUnit.assertEquals(tweet.getMessage(), t.getMessage());
         AssertJUnit.assertEquals(tweet.getDate(), t.getDate());
@@ -89,7 +86,7 @@ public class ObjectContextImplTest {
 
         context.add(User.class);
         String json = new String(context.write(user).copiedBytes());
-        User u = context.read(User.class, new InternalSearchHit(1,"1","user",json.getBytes(),null));
+        User u = context.read(new InternalSearchHit(1, "1", "user", json.getBytes(), null));
 
     }
 }
