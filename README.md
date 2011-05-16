@@ -30,7 +30,8 @@ Configure you model with the annotations:
     }
 
 Configure an ObjectContext instance with your(s) class(es):
-_There is no factory since OSEM tend to be integrated directly in ES
+
+*There is no factory since OSEM tend to be integrated directly in ES*
 
     ObjectContext context = new ObjectContextImpl();
     context.add(Tweet.class);
