@@ -31,8 +31,8 @@ import org.elasticsearch.index.query.xcontent.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 import org.elasticsearch.osem.core.ObjectContext;
+import org.elasticsearch.osem.core.ObjectContextFactory;
 import org.elasticsearch.osem.core.ObjectContextDeserializationException;
-import org.elasticsearch.osem.core.impl.ObjectContextImpl;
 import org.elasticsearch.osem.pojo.twitter.Tweet;
 import org.elasticsearch.osem.pojo.users.Contact;
 import org.elasticsearch.osem.pojo.users.EmailContact;
@@ -58,7 +58,7 @@ public class ObjectContextIntegrationTest {
 
     @BeforeMethod()
     public void doStart() {
-        context = new ObjectContextImpl();
+        context = ObjectContextFactory.create();
         // Starting node
         ImmutableSettings.Builder settings = NodeBuilder.nodeBuilder().settings();
         settings.put("gateway.type", "none");

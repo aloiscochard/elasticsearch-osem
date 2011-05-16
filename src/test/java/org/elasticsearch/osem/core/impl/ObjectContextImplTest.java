@@ -58,7 +58,7 @@ public class ObjectContextImplTest {
 
         context.add(Tweet.class);
 
-        String mapping = "{\"tweet\":{\"properties\":{\"message\":{\"type\":\"string\"},\"post_date\":{\"type\":\"date\",\"format\":\"dateOptionalTime\"},\"user\":{\"type\":\"string\"}}}}";
+        String mapping = "{\"tweet\":{\"properties\":{\"_class\":{\"type\":\"string\",\"include_in_all\":false},\"message\":{\"type\":\"string\"},\"post_date\":{\"type\":\"date\",\"format\":\"dateOptionalTime\"},\"user\":{\"type\":\"string\"}}}}";
 
         AssertJUnit.assertEquals(mapping, new String(context.getMapping(Tweet.class).copiedBytes()));
 

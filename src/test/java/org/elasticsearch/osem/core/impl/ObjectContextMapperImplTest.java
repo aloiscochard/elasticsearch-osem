@@ -51,7 +51,7 @@ public class ObjectContextMapperImplTest extends AbstractObjectContextTest {
     public void testGetMapping() throws ObjectContextMappingException, IOException {
         mapper.add(User.class);
         // TODO [acochard] improve polymorphism handling
-        String expected = "{\"user\":{\"properties\":{\"_id\":{\"type\":\"string\"},\"contacts\":{\"type\":\"object\"},\"name\":{\"type\":\"string\"}}}}";
+        String expected = "{\"user\":{\"properties\":{\"_class\":{\"type\":\"string\",\"include_in_all\":false},\"_id\":{\"type\":\"string\"},\"contacts\":{\"properties\":{\"_class\":{\"type\":\"string\",\"include_in_all\":false}}},\"name\":{\"type\":\"string\"}}}}";
         AssertJUnit.assertEquals(expected, new String(mapper.getMapping(User.class).copiedBytes()));
     }
 
