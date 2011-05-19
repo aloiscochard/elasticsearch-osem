@@ -4,7 +4,7 @@ Object Search Engine Mapper for ElasticSearch
 
 ## Usage
 
-Configure you model with the annotations:
+Configure your model with the annotations:
 
     import org.elasticsearch.osem.annotations.Indexable;
     import org.elasticsearch.osem.annotations.Searchable;
